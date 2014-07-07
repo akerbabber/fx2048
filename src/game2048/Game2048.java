@@ -1,5 +1,6 @@
 package game2048;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.ConditionalFeature;
@@ -43,8 +44,16 @@ public class Game2048 extends Application {
         gameManager.getAutomatonButton().setOnAction((event)->{
             /* Lock the keys */
             scene.setOnKeyPressed(ke->{});
+            java.util.HashMap<Location,Integer> gridAux=new giocatoreAutomatico.GrigliaObject(gameManager.getGameGrid());
+           System.out.println( gridAux.toString());
+    
+      giocatoreAutomatico.GiocatoreAutomatico giocAusu=new giocatoreAutomatico.player.MyGiocatoreAutomatico();
             
-
+           int intAsau=giocAusu.prossimaMossa(null);
+           if(intAsau==0) this.gameManager.move(Direction.UP);
+            if(intAsau==1) this.gameManager.move(Direction.DOWN);
+             if(intAsau==2) this.gameManager.move(Direction.LEFT);
+              if(intAsau==3) this.gameManager.move(Direction.RIGHT);
         });
 
         if (isARMDevice()) {

@@ -5,12 +5,16 @@ import java.util.*;
 
 public class GrigliaObject extends HashMap<Location, Integer> implements Griglia {
 	
-	public GrigliaObject(HashMap<Location, Tile> gameGrid){
+	public GrigliaObject(Map<Location, Tile> gameGrid){
+                super(16);
+		Set<Location> locations=gameGrid.keySet();
 
-		Collection<Tile> grid=gameGrid.values();
-
-		for(Tile currentTile : grid){
-			this.put(currentTile.getLocation(),currentTile.getValue()==0?new Integer(-1):currentTile.getValue());
+		for(Location currentLocation : locations){
+			Tile auxTile = gameGrid.get(currentLocation);
+                        if (auxTile==null) this.put(currentLocation,new Integer(-1));
+                        else this.put(currentLocation,auxTile.getValue());
+                        
+                        
 		}
 
 	}
