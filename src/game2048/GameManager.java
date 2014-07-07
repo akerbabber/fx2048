@@ -75,6 +75,8 @@ public class GameManager extends Group {
     private final HBox hOvrLabel = new HBox();
     private final HBox hOvrButton = new HBox();
 
+    private final Button automatonButton = new Button("Let the automaton play for you.");
+
     public GameManager() {
         this(DEFAULT_GRID_SIZE);
     }
@@ -176,12 +178,15 @@ public class GameManager extends Group {
             gameGrid.values().stream().filter(Objects::nonNull).forEach(Tile::clearMerge);
         });
 
+        
         synchronized (gameGrid) {
             movingTiles = true;
         }
 
         parallelTransition.play();
         parallelTransition.getChildren().clear();
+
+
     }
 
     private Location findFarthestLocation(Location location, Direction direction) {
@@ -251,13 +256,18 @@ public class GameManager extends Group {
         lblScore.getStyleClass().add("score");
         lblScore.textProperty().bind(gameScoreProperty.asString());
         vScore.getChildren().addAll(lblTit, lblScore);
+        /* Automaton button's boc */
+        HBox buttonsBox=new HBox();        
+
+        buttonsBox.getChildren().add(automatonButton);
+
 
         hTop.getChildren().addAll(lblTitle, lblSubtitle, hFill, vScore);
         hTop.setMinSize(GRID_WIDTH, TOP_HEIGHT);
         hTop.setPrefSize(GRID_WIDTH, TOP_HEIGHT);
         hTop.setMaxSize(GRID_WIDTH, TOP_HEIGHT);
 
-        vGame.getChildren().add(hTop);
+        vGame.getChildren().addAll(hTop, buttonsBox);
         getChildren().add(vGame);
 
         lblPoints.getStyleClass().add("points");
@@ -556,5 +566,21 @@ public class GameManager extends Group {
             // not session found, restart again
             resetGame();
         }
+    }
+
+    public Button getAutomatonButton(){
+        return this.automatonButton;
+    }
+
+    public boolean isGameOver(){
+
+        return this.gameOverProperty.get();
+
+    }
+
+    public Map<Location, Tile> getGameGrid(){
+
+        return this.gameGrid;
+
     }
 }
