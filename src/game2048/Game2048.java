@@ -24,6 +24,7 @@ public class Game2048 extends Application {
     public void start(Stage primaryStage) {
         gameManager = new GameManager();
         gameBounds = gameManager.getLayoutBounds();
+        int token=0;
 
         StackPane root = new StackPane(gameManager);
         root.setPrefSize(gameBounds.getWidth(), gameBounds.getHeight());
@@ -38,6 +39,13 @@ public class Game2048 extends Application {
         scene.getStylesheets().add("game2048/game.css");
         addKeyHandler(scene);
         addSwipeHandlers(scene);
+        
+        gameManager.getAutomatonButton().setOnAction((event)->{
+            /* Lock the keys */
+            scene.setOnKeyPressed(ke->{});
+            
+
+        });
 
         if (isARMDevice()) {
             primaryStage.setFullScreen(true);
