@@ -1,5 +1,6 @@
 package game2048;
 
+import giocatoreAutomatico.Griglia;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -49,7 +50,7 @@ public class Game2048 extends Application {
     
       giocatoreAutomatico.GiocatoreAutomatico giocAusu=new giocatoreAutomatico.player.MyGiocatoreAutomatico();
             
-           int intAsau=giocAusu.prossimaMossa(null);
+           int intAsau=giocAusu.prossimaMossa(  gameManager.getIntegerGrid());
            if(intAsau==0) this.gameManager.move(Direction.UP);
             if(intAsau==1) this.gameManager.move(Direction.DOWN);
              if(intAsau==2) this.gameManager.move(Direction.LEFT);

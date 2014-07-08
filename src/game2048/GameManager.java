@@ -578,9 +578,21 @@ public class GameManager extends Group {
 
     }
 
-    public Map<Location, Tile> getGameGrid(){
+    /**
+     *
+     * @return
+     */
+    public giocatoreAutomatico.GrigliaObject getIntegerGrid(){
+         Set<Location> locations=gameGrid.keySet();
+         giocatoreAutomatico.GrigliaObject map=new giocatoreAutomatico.GrigliaObject(gameGrid);
+           
+        return map;
+
+    }
+     public Map<Location, Tile> getGameGrid(){
 
         return this.gameGrid;
 
     }
+    
 }

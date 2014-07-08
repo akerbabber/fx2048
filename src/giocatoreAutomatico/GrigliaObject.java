@@ -11,7 +11,7 @@ public class GrigliaObject extends HashMap<Location, Integer> implements Griglia
 
 		for(Location currentLocation : locations){
 			Tile auxTile = gameGrid.get(currentLocation);
-                        if (auxTile==null) this.put(currentLocation,new Integer(-1));
+                        if(gameGrid.get(currentLocation)==null) this.put(currentLocation,new Integer(-1));
                         else this.put(currentLocation,auxTile.getValue());
                         
                         
