@@ -176,6 +176,8 @@ public class GameManager extends Group {
 
             // reset merged after each movement
             gameGrid.values().stream().filter(Objects::nonNull).forEach(Tile::clearMerge);
+
+
         });
 
         
@@ -185,7 +187,6 @@ public class GameManager extends Group {
 
         parallelTransition.play();
         parallelTransition.getChildren().clear();
-
 
     }
 
@@ -569,18 +570,31 @@ public class GameManager extends Group {
     }
 
     public Button getAutomatonButton(){
+
         return this.automatonButton;
+        
     }
 
     public boolean isGameOver(){
 
-        return this.gameOverProperty.get();
+        return (this.gameOverProperty.get() || this.gameWonProperty.get());
 
     }
+
 
     public Map<Location, Tile> getGameGrid(){
 
         return this.gameGrid;
+
+    }
+
+    public boolean areTilesNotMoving(){
+
+        synchronized(gameGrid){
+
+            return !(this.movingTiles);
+
+        }
 
     }
 }

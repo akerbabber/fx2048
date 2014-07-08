@@ -12,6 +12,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import giocatoreAutomatico.*;
+import giocatoreAutomatico.player.*;
+
 /**
  * @author bruno.borges@oracle.com
  */
@@ -40,12 +43,64 @@ public class Game2048 extends Application {
         addKeyHandler(scene);
         addSwipeHandlers(scene);
         
+        
         gameManager.getAutomatonButton().setOnAction((event)->{
-            /* Lock the keys */
-            scene.setOnKeyPressed(ke->{});
+
+            try{
+                /* Lock the keys */
+                scene.setOnKeyPressed(ke->{});
+
+                GiocatoreAutomatico player1=GiocatoreAutomatico.getGiocatoreAutomatico();
+
+                if(player1==null)
+                    System.out.println("player1 == null");
+
+                /* !! FIND A WAY TO SYNCHRONIZE THE TWO THREADS OTHER THAN THE TIMEOUT! */
+                while(!(gameManager.isGameOver())){
+
+                    switch(player1.prossimaMossa(new GrigliaObject(gameManager.getGameGrid()));){
+
+                        case 0:
+                            gameManager.move(Direction.UP);
+                            System.out.println("Moved up");
+                        break;
+
+                        case 1:
+                            gameManager.move(Direction.RIGHT);
+                            System.out.println("Moved right");
+                        break;
+
+                        case 2:
+                            gameManager.move(Direction.DOWN);
+                            System.out.println("Moved down");
+                        break;
+
+                        case 3:
+                            gameManager.move(Direction.LEFT);
+                            System.out.println("Moved left");
+                        break;
+
+                    }
+
+                    System.out.println("Waiting 5 seconds...");
+
+                    synchronized(this){
+
+                        this.wait(5000);
+
+                    }
+                    
+                    System.out.println("5 seconds elapsed!");
+
+                }
+
+            }catch(Exception e1){}
             
+            /* Reset user input */
+            addKeyHandler(scene);
 
         });
+
 
         if (isARMDevice()) {
             primaryStage.setFullScreen(true);
