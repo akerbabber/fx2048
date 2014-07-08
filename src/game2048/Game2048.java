@@ -58,7 +58,7 @@ public class Game2048 extends Application {
                 /* !! FIND A WAY TO SYNCHRONIZE THE TWO THREADS OTHER THAN THE TIMEOUT! */
                 while(!(gameManager.isGameOver())){
 
-                    switch(player1.prossimaMossa(new GrigliaObject(gameManager.getGameGrid()));){
+                    switch(player1.prossimaMossa(new GrigliaObject(gameManager.getGameGrid()))){
 
                         case 0:
                             gameManager.move(Direction.UP);
