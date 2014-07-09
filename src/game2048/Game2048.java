@@ -24,7 +24,7 @@ public class Game2048 extends Application {
     private Bounds gameBounds;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception{
         gameManager = new GameManager();
         gameBounds = gameManager.getLayoutBounds();
         int token=0;
@@ -43,20 +43,15 @@ public class Game2048 extends Application {
         addKeyHandler(scene);
         addSwipeHandlers(scene);
         
+        GiocatoreAutomatico player1=GiocatoreAutomatico.getGiocatoreAutomatico();
         
         gameManager.getAutomatonButton().setOnAction((event)->{
 
-            try{
                 /* Lock the keys */
                 scene.setOnKeyPressed(ke->{});
 
-                GiocatoreAutomatico player1=GiocatoreAutomatico.getGiocatoreAutomatico();
-
-                if(player1==null)
-                    System.out.println("player1 == null");
-
-                /* !! FIND A WAY TO SYNCHRONIZE THE TWO THREADS OTHER THAN THE TIMEOUT! */
-                while(!(gameManager.isGameOver())){
+                /* !! FIND A WAY TO SYNCHRONIZE ANIMATION AND MOVE */
+                if(!(gameManager.isGameOver()) && !(gameManager.getMovingTiles())){
 
                     switch(player1.prossimaMossa(new GrigliaObject(gameManager.getGameGrid()))){
 
@@ -82,22 +77,14 @@ public class Game2048 extends Application {
 
                     }
 
-                    System.out.println("Waiting 5 seconds...");
+                }
+                
+                if(gameManager.isGameOver()){
 
-                    synchronized(this){
-
-                        this.wait(5000);
-
-                    }
-                    
-                    System.out.println("5 seconds elapsed!");
+                    /* Reset user input */
+                    addKeyHandler(scene);
 
                 }
-
-            }catch(Exception e1){}
-            
-            /* Reset user input */
-            addKeyHandler(scene);
 
         });
 

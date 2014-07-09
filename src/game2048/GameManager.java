@@ -158,6 +158,7 @@ public class GameManager extends Group {
         }
 
         parallelTransition.setOnFinished(e -> {
+            System.out.println("Animation finished");
             synchronized (gameGrid) {
                 movingTiles = false;
             }
@@ -182,11 +183,15 @@ public class GameManager extends Group {
 
         
         synchronized (gameGrid) {
+
             movingTiles = true;
+
         }
 
         parallelTransition.play();
         parallelTransition.getChildren().clear();
+
+        System.out.println("Play lunched");        
 
     }
 
@@ -588,11 +593,11 @@ public class GameManager extends Group {
 
     }
 
-    public boolean areTilesNotMoving(){
+    public boolean getMovingTiles(){
 
         synchronized(gameGrid){
 
-            return !(this.movingTiles);
+            return this.movingTiles;
 
         }
 
