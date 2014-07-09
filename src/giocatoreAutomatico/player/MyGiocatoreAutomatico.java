@@ -2,8 +2,6 @@ package giocatoreAutomatico.player;
 
 import game2048.*;
 import giocatoreAutomatico.*;
-import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
@@ -320,7 +318,7 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
             }
         }
         
-        return count;
+        return count*2;
 
 
 	
@@ -378,28 +376,43 @@ public int monotony(int [][] auxGrid)
     }
 
     count = Math.abs(count);
-    return count;
+    return count*2;
 }
 
+public boolean isSame(int [][] first,int [][] second) {
+    
+     for(int j=0; j<4; j++)
+    
+        for(int i=0; i<4; i++)
+        
+    if (first[i][j]!=second[i][j]) return true;
+    return false;
+}
 
-public int arbiter() 
+    
+    public int arbiter() 
 {
     
     int tmp=0;
     int dir=3;
-
+       int[][] oldGriglia = this.griglia;
+      
+       if (this.isSame(oldGriglia, this.euristic(Direction.LEFT)))
     tmp=this.contiguity(this.euristic(Direction.LEFT))+this.freeCells(this.euristic(Direction.LEFT))+this.monotony(this.euristic(Direction.LEFT));
-     if (tmp> this.contiguity(this.euristic(Direction.UP))+this.freeCells(this.euristic(Direction.UP))+this.monotony(this.euristic(Direction.UP))){
+    if (this.isSame(oldGriglia, this.euristic(Direction.UP)))
+     if (tmp< this.contiguity(this.euristic(Direction.UP))+this.freeCells(this.euristic(Direction.UP))+this.monotony(this.euristic(Direction.UP))){
          tmp=this.contiguity(this.euristic(Direction.UP))+this.freeCells(this.euristic(Direction.UP))+this.monotony(this.euristic(Direction.UP));
          dir=0;
          
      }
-     if (tmp> this.contiguity(this.euristic(Direction.RIGHT))+this.freeCells(this.euristic(Direction.RIGHT))+this.monotony(this.euristic(Direction.RIGHT))){
+    if (this.isSame(oldGriglia, this.euristic(Direction.RIGHT)))
+     if (tmp< this.contiguity(this.euristic(Direction.RIGHT))+this.freeCells(this.euristic(Direction.RIGHT))+this.monotony(this.euristic(Direction.RIGHT))){
          tmp=this.contiguity(this.euristic(Direction.RIGHT))+this.freeCells(this.euristic(Direction.RIGHT))+this.monotony(this.euristic(Direction.RIGHT));
          dir=1;
          
      }
-     if (tmp> this.contiguity(this.euristic(Direction.DOWN))+this.freeCells(this.euristic(Direction.DOWN))+this.monotony(this.euristic(Direction.DOWN))){
+    if (this.isSame(oldGriglia, this.euristic(Direction.DOWN)))
+     if (tmp< (this.contiguity(this.euristic(Direction.DOWN))+this.freeCells(this.euristic(Direction.DOWN))+this.monotony(this.euristic(Direction.DOWN)))/3){
          tmp=this.contiguity(this.euristic(Direction.DOWN))+this.freeCells(this.euristic(Direction.DOWN))+this.monotony(this.euristic(Direction.UP));
          dir=2;
          
