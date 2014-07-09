@@ -158,7 +158,6 @@ public class GameManager extends Group {
         }
 
         parallelTransition.setOnFinished(e -> {
-            System.out.println("Animation finished");
             synchronized (gameGrid) {
                 movingTiles = false;
             }
@@ -190,8 +189,6 @@ public class GameManager extends Group {
 
         parallelTransition.play();
         parallelTransition.getChildren().clear();
-
-        System.out.println("Play lunched");        
 
     }
 
