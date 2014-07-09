@@ -2,17 +2,21 @@ package giocatoreAutomatico.player;
 
 import game2048.*;
 import giocatoreAutomatico.*;
+import java.util.Arrays;
 import java.util.Set;
 
 public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
     
-    final int monotonyWeight=3;
-    final int contiguityWeight=3;
+    final int monotonyWeight=2;
+    final int contiguityWeight=2;
     final int freeCellsWeight=2;
-    final int upSideWeight=2;
-    final int rightSideWeight=2;
-    final int leftSideWeight=3;
+    final int mergeWeight=1;
+    final int upSideWeight=6;
+    final int rightSideWeight=5;
+    final int leftSideWeight=4;
     final int downSideWeight=3;
+    final int previsionTreeDepth=3;
+    
     private int[][] griglia = new int[4][4];
 
     public int prossimaMossa(Griglia g) {
@@ -23,25 +27,36 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
 
             this.griglia[a.getY()][a.getX()] = g.get(a).intValue();
         }
+     this.stampa(this.euristic(griglia, Direction.UP), Direction.UP, monotonyWeight);
+     this.stampa(this.euristic(griglia, Direction.DOWN), Direction.DOWN, monotonyWeight);
       
-       return this.arbiter();
+       return this.arbiter(this.griglia);
        
     }
+    
+    public void stampa(int [][] grid,Direction dir,int profondita) {
+        System.out.println(dir.name()+"profondita"+profondita);
+        for (int i=0;i<4;i++) { for (int j=0;j<4;j++) {
+            System.out.print(grid[i][j]+" ");
+        }
+        System.out.println();
+    }
+    }
 
-    public int[][] euristic(Direction dir) 
+    public int[][] euristic(int [][] griglia,Direction dir) 
     {
      
 
-        int[][] auxGrid = new int[4][4];     //girglia utilizzata per lo spostamento
-       
         
+       
+        int [][] auxGrid=new int[4][4];
         boolean[] isMerged = new boolean[4]; //vettore per il controllo delle tile mergiate
         int i, j, k; //indici
         
         
         for(i=0; i<4; i++)   //copio la griglia
             for (j=0; j<4; j++) {
-                auxGrid[i][j]  = this.griglia[i][j];            
+                auxGrid[i][j]  = griglia[i][j];            
                
             }
         ////////////LEFT
@@ -73,7 +88,7 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
        else  
         {
             return prevediMossaGiu(auxGrid);
-    }
+        }
        
         
         
@@ -83,8 +98,15 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
 
 
 }
-    public int [][] prevediMossaDestra(int [][] auxGrid ){
+    public int [][] prevediMossaDestra(int [][] grid ){
         
+        int [][] auxGrid=new int [4][4];
+        for (int x=0;x<4;x++) {
+        for (int y=0;y<4;y++) {
+            auxGrid[x][y]=grid[x][y];
+                
+            }
+        }
         int i,j,k;
         boolean[] isMerged = new boolean[4];
          for(i=0; i<4; i++)
@@ -132,8 +154,14 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
     return auxGrid;
     }
     
-    public int [][] prevediMossaSinistra(int [][] auxGrid ) {
-        
+    public int [][] prevediMossaSinistra(int [][] grid ) {
+        int [][] auxGrid=new int [4][4];
+        for (int x=0;x<4;x++) {
+        for (int y=0;y<4;y++) {
+            auxGrid[x][y]=grid[x][y];
+                
+            }
+        }
         int i,j,k;
         boolean[] isMerged = new boolean[4];
             for(i=0; i<4; i++)
@@ -183,8 +211,14 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
         return auxGrid;
     }
     
-    public int [][] prevediMossaSu(int [][] auxGrid ) {
-        
+    public int [][] prevediMossaSu(int [][] grid ) {
+        int [][] auxGrid=new int [4][4];
+        for (int x=0;x<4;x++) {
+        for (int y=0;y<4;y++) {
+            auxGrid[x][y]=grid[x][y];
+                
+            }
+        }
         int i,j,k;
         boolean[] isMerged = new boolean[4];
         
@@ -232,8 +266,14 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
         return auxGrid;
     
     }
-    public int [][] prevediMossaGiu(int [][] auxGrid ) {
-        
+    public int [][] prevediMossaGiu(int [][] grid ) {
+        int [][] auxGrid=new int [4][4];
+        for (int x=0;x<4;x++) {
+        for (int y=0;y<4;y++) {
+            auxGrid[x][y]=grid[x][y];
+                
+            }
+        }
         int i,j,k;
         boolean[] isMerged = new boolean[4];
         for(j=0; j<4; j++)
@@ -293,6 +333,7 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
                 }
             
                 }
+        System.out.println("free "+cont);
         return cont;
         
         
@@ -344,12 +385,67 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
 
             }
         }
-        
+        System.out.println("cont "+count);
         return count;
 
 
 	
 } 
+    public int puntiMerge(int[][] auxGrid, Direction dir)
+{
+    int i, j, k,tmp,count=0;
+    if(dir==Direction.LEFT || dir==Direction.RIGHT)
+    {
+        for(i=0; i<4; i++)
+        {
+            for(j=0; j<4; j++)
+            {
+                tmp = auxGrid[i][j];
+                k=j+1;
+                while(k<4 && auxGrid[i][k]==-1)
+                    k++;
+
+                if(k<4)
+                    if(tmp == auxGrid[i][k])
+                    {
+                        count+=auxGrid[i][k];
+                        j=k;
+                    }
+
+            }
+        }
+
+    }
+
+
+    if(dir==Direction.UP || dir==Direction.DOWN)
+    {
+        for(j=0; j<4; j++)
+        {
+            for(i=0; i<4; i++)
+            {
+                tmp = auxGrid[i][j];
+                k=i+1;
+                while(k<4 && auxGrid[k][j]==-1)
+                    k++;
+
+                if(k<4)
+                    if(tmp == auxGrid[k][j])
+                    {
+                        count+=auxGrid[k][j];
+                        i=k;
+                    }
+
+            }
+        }
+    }
+
+
+
+System.out.println("merge "+count);
+        return count;
+
+}
     
 public int monotony(int [][] auxGrid) 
 {
@@ -403,6 +499,8 @@ public int monotony(int [][] auxGrid)
     }
 
     count = Math.abs(count);
+    System.out.println("monotony "+count);
+      System.out.println();
     return count;
 }
 
@@ -416,46 +514,84 @@ public boolean isNotSame(int [][] first,int [][] second) {
     return false;
 }
 
-public int punteggioMossa(Direction dir) {
-    int punteggio=this.contiguity(this.euristic(dir))*contiguityWeight+this.freeCells(this.euristic(dir))*freeCellsWeight+this.monotony(this.euristic(dir))*monotonyWeight;
-    if (dir==Direction.LEFT) return punteggio*leftSideWeight;
-    else if (dir==Direction.UP) return punteggio*upSideWeight;
-    else if (dir==Direction.DOWN) return punteggio*downSideWeight;
-    else return punteggio*rightSideWeight;
+public int punteggioMossa(int[][] grid, Direction dir, int ricorsioni/*, int tot*/) 
+{
+    int[] punteggio = new int[4];
+     int [][] auxGrid=new int [4][4];
+    int punti;
+    for (int x=0;x<4;x++) {
+        for (int y=0;y<4;y++) {
+            auxGrid[x][y]=grid[x][y];
+                
+            }
+        }
+    auxGrid=this.euristic(auxGrid, dir);
+    
+    
+    if(ricorsioni>0)
+    {
+        ricorsioni--;
+        punteggio[0] = punteggioMossa(this.euristic(auxGrid,Direction.UP ), Direction.UP, ricorsioni);
+        punteggio[1]= punteggioMossa(this.euristic(auxGrid,Direction.RIGHT ),Direction.RIGHT, ricorsioni);
+        punteggio[2]= punteggioMossa(this.euristic(auxGrid,Direction.DOWN ), Direction.DOWN, ricorsioni);
+        punteggio[3]= punteggioMossa(this.euristic(auxGrid,Direction.LEFT ), Direction.LEFT, ricorsioni);
+             Arrays.sort(punteggio);
+        return punteggio[3]; 
+    
+    }      
+    
+    
+    punti=this.puntiMerge(grid, dir)+this.contiguity(auxGrid)*contiguityWeight+this.freeCells(auxGrid)*freeCellsWeight+this.monotony(auxGrid)*monotonyWeight;
+    //this.stampa(auxGrid, dir, ricorsioni);
+    if (dir==Direction.LEFT) return punti;
+    else if (dir==Direction.UP) return punti;
+    else if (dir==Direction.DOWN) return punti;
+    else return punti;
+    
 }
 
     
-    public int arbiter() {
-
+    public int arbiter(int [][] oldGriglia) {
+        
         int punti = 0;
-        int dir = 3;
-        int[][] oldGriglia = this.griglia;
-
-        if (this.isNotSame(oldGriglia, this.euristic(Direction.LEFT))) {
-            punti = (punteggioMossa(Direction.LEFT));
+        int dir = 1;
+  
+        if (this.isNotSame(oldGriglia, this.euristic(oldGriglia,Direction.RIGHT))) {
+            
+            punti = rightSideWeight*(punteggioMossa(oldGriglia,Direction.RIGHT, previsionTreeDepth));
+            
         }
-        if (this.isNotSame(oldGriglia, this.euristic(Direction.UP))) {
-            if (punti < punteggioMossa(Direction.UP)) {
-                punti = punteggioMossa(Direction.UP);
+        if (this.isNotSame(oldGriglia, this.euristic(oldGriglia,Direction.UP))) {
+            if (punti < upSideWeight*punteggioMossa(oldGriglia,Direction.UP, previsionTreeDepth)) {
+                punti = upSideWeight*punteggioMossa(oldGriglia,Direction.UP, previsionTreeDepth);
                 dir = 0;
+               
 
             }
         }
-        if (this.isNotSame(oldGriglia, this.euristic(Direction.RIGHT))) {
-            if (punti < punteggioMossa(Direction.RIGHT)) {
-                punti = punteggioMossa(Direction.RIGHT);
-                dir = 1;
+        if (this.isNotSame(oldGriglia, this.euristic(oldGriglia,Direction.LEFT))) {
+            if (punti < leftSideWeight*punteggioMossa(oldGriglia,Direction.LEFT, previsionTreeDepth)) {
+                punti = leftSideWeight*punteggioMossa(oldGriglia,Direction.LEFT, previsionTreeDepth);
+                dir = 3;
+               
 
             }
         }
-        if (this.isNotSame(oldGriglia, this.euristic(Direction.DOWN))) {
-            if (punti < punteggioMossa(Direction.DOWN)) {
-                punti = punteggioMossa(Direction.DOWN);
+        if (this.isNotSame(oldGriglia, this.euristic(oldGriglia,Direction.DOWN))) {
+            if (punti < downSideWeight*punteggioMossa(oldGriglia,Direction.DOWN, previsionTreeDepth)) {
+                punti = downSideWeight*punteggioMossa(oldGriglia,Direction.DOWN, previsionTreeDepth);
                 dir = 2;
 
             }
         }
-
+       System.out.println(punteggioMossa(oldGriglia,Direction.UP, previsionTreeDepth));
+        System.out.println();
+          System.out.println(punteggioMossa(oldGriglia,Direction.DOWN, previsionTreeDepth));
+            System.out.println();
+           System.out.println(punteggioMossa(oldGriglia,Direction.LEFT, previsionTreeDepth));
+             System.out.println(); 
+           System.out.println(punteggioMossa(oldGriglia,Direction.RIGHT, previsionTreeDepth));
+             System.out.println();
         return dir;
 
     }
