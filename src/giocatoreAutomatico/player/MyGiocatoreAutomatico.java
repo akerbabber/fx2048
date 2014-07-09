@@ -5,12 +5,19 @@ import giocatoreAutomatico.*;
 import java.util.Set;
 
 public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
-
+    
+    final int monotonyWeight=3;
+    final int contiguityWeight=3;
+    final int freeCellsWeight=2;
+    final int upSideWeight=2;
+    final int rightSideWeight=2;
+    final int leftSideWeight=3;
+    final int downSideWeight=3;
     private int[][] griglia = new int[4][4];
 
     public int prossimaMossa(Griglia g) {
         // tmp implementation with random moveù
-              g.toString();
+           //   g.toString();
         Set<Location> locations = g.keySet();
         for (Location a : locations) {
 
@@ -25,23 +32,110 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
     {
      
 
-        int[][] auxGrid = new int[4][4];     
-        int[][] oldGrid = new int[4][4];    
+        int[][] auxGrid = new int[4][4];     //girglia utilizzata per lo spostamento
+       
         
-        boolean[] isMerged = new boolean[4];
-        int i, j, k;
+        boolean[] isMerged = new boolean[4]; //vettore per il controllo delle tile mergiate
+        int i, j, k; //indici
         
         
-        for(i=0; i<4; i++)
-            for (j=0; j<4; j++)
-                auxGrid[i][j]  = this.griglia[i][j];
-            for(i=0; i<4; i++)
-            for (j=0; j<4; j++)
-                oldGrid[i][j]  = this.griglia[i][j];
-
+        for(i=0; i<4; i++)   //copio la griglia
+            for (j=0; j<4; j++) {
+                auxGrid[i][j]  = this.griglia[i][j];            
+               
+            }
         ////////////LEFT
         if (dir==Direction.LEFT)
         {
+            return prevediMossaSinistra(auxGrid);
+
+
+        }
+
+
+        ///////////////RIGHT
+       else if (dir==Direction.RIGHT) 
+        {
+            return prevediMossaDestra(auxGrid);
+        }
+
+        //////////////UP
+       else if (dir==Direction.UP) 
+        {
+
+
+            return prevediMossaSu(auxGrid);
+
+            }
+
+        
+        //////////////DOWN
+       else  
+        {
+            return prevediMossaGiu(auxGrid);
+    }
+       
+        
+        
+
+
+
+
+
+}
+    public int [][] prevediMossaDestra(int [][] auxGrid ){
+        
+        int i,j,k;
+        boolean[] isMerged = new boolean[4];
+         for(i=0; i<4; i++)
+            {
+                    for(k=0; k<4; k++)
+                            isMerged[k] = false;
+
+                    for(j=3; j>=0; j--)
+                    {
+                            if(auxGrid[i][j]!=-1)
+                            {
+                                    boolean merging=false;
+                                    for(k=j+1; k<4; k++)
+                                    {
+                                            if(auxGrid[i][k]!=-1)
+                                            {
+                                                    if(auxGrid[i][k]==auxGrid[i][j])					 
+                                                    {
+                                                            if (isMerged[k]==false)
+                                                            {
+                                                                    auxGrid[i][k]*=2;
+                                                                    isMerged[k]=true;
+                                                                    merging=true;
+                                                            }
+                                                            else
+                                                            {
+                                                                    break;
+                                                            }
+                                                    }
+                                                    else
+                                                            break;
+                                            }
+                                    }
+                                    if(!merging)
+                                            auxGrid[i][k-1]=auxGrid[i][j];
+                                    if(j!=k-1)
+                                            auxGrid[i][j] = -1;
+                            }
+
+
+                    }
+
+            }
+
+    return auxGrid;
+    }
+    
+    public int [][] prevediMossaSinistra(int [][] auxGrid ) {
+        
+        int i,j,k;
+        boolean[] isMerged = new boolean[4];
             for(i=0; i<4; i++)
             {
                     for(k=0; k<4; k++)
@@ -86,63 +180,14 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
 
 
 
-        }
-
-
-        ///////////////RIGHT
-        if (dir==Direction.RIGHT) 
-        {
-
-            for(i=0; i<4; i++)
-            {
-                    for(k=0; k<4; k++)
-                            isMerged[k] = false;
-
-                    for(j=3; j>=0; j--)
-                    {
-                            if(auxGrid[i][j]!=-1)
-                            {
-                                    boolean merging=false;
-                                    for(k=j+1; k<4; k++)
-                                    {
-                                            if(auxGrid[i][k]!=-1)
-                                            {
-                                                    if(auxGrid[i][k]==auxGrid[i][j])					 
-                                                    {
-                                                            if (isMerged[k]==false)
-                                                            {
-                                                                    auxGrid[i][k]*=2;
-                                                                    isMerged[k]=true;
-                                                                    merging=true;
-                                                            }
-                                                            else
-                                                            {
-                                                                    break;
-                                                            }
-                                                    }
-                                                    else
-                                                            break;
-                                            }
-                                    }
-                                    if(!merging)
-                                            auxGrid[i][k-1]=auxGrid[i][j];
-                                    if(j!=k-1)
-                                            auxGrid[i][j] = -1;
-                            }
-
-
-                    }
-
-            }
-
-
-        }
-
-        //////////////UP
-        if (dir==Direction.UP) 
-        {
-
-
+        return auxGrid;
+    }
+    
+    public int [][] prevediMossaSu(int [][] auxGrid ) {
+        
+        int i,j,k;
+        boolean[] isMerged = new boolean[4];
+        
             for(j=0; j<4; j++)
             {
                     for(k=0; k<4; k++)
@@ -184,12 +229,14 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
                     }
 
             }
-
-        }
-        //////////////DOWN
-        if (dir==Direction.DOWN) 
-        {
-            for(j=0; j<4; j++)
+        return auxGrid;
+    
+    }
+    public int [][] prevediMossaGiu(int [][] auxGrid ) {
+        
+        int i,j,k;
+        boolean[] isMerged = new boolean[4];
+        for(j=0; j<4; j++)
             {
                     for(k=0; k<4; k++)
                             isMerged[k] = false;
@@ -230,28 +277,8 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
                     }
 
             } 
-    }
-       
-        for (i=0;i<4;i++) 
-        {
-            for (j=0;j<4;j++) 
-            {
-                System.out.print(auxGrid[i][j]+" ");
-            }
-            System.out.println();
-        }
-        
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        ///inserire confronto aux e old grid
         return auxGrid;
-
-
-
-
-
-}
+    }
 
     
 
@@ -318,7 +345,7 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
             }
         }
         
-        return count*2;
+        return count;
 
 
 	
@@ -376,10 +403,10 @@ public int monotony(int [][] auxGrid)
     }
 
     count = Math.abs(count);
-    return count*2;
+    return count;
 }
 
-public boolean isSame(int [][] first,int [][] second) {
+public boolean isNotSame(int [][] first,int [][] second) {
     
      for(int j=0; j<4; j++)
     
@@ -389,38 +416,48 @@ public boolean isSame(int [][] first,int [][] second) {
     return false;
 }
 
-    
-    public int arbiter() 
-{
-    
-    int tmp=0;
-    int dir=3;
-       int[][] oldGriglia = this.griglia;
-      
-       if (this.isSame(oldGriglia, this.euristic(Direction.LEFT)))
-    tmp=this.contiguity(this.euristic(Direction.LEFT))+this.freeCells(this.euristic(Direction.LEFT))+this.monotony(this.euristic(Direction.LEFT));
-    if (this.isSame(oldGriglia, this.euristic(Direction.UP)))
-     if (tmp< this.contiguity(this.euristic(Direction.UP))+this.freeCells(this.euristic(Direction.UP))+this.monotony(this.euristic(Direction.UP))){
-         tmp=this.contiguity(this.euristic(Direction.UP))+this.freeCells(this.euristic(Direction.UP))+this.monotony(this.euristic(Direction.UP));
-         dir=0;
-         
-     }
-    if (this.isSame(oldGriglia, this.euristic(Direction.RIGHT)))
-     if (tmp< this.contiguity(this.euristic(Direction.RIGHT))+this.freeCells(this.euristic(Direction.RIGHT))+this.monotony(this.euristic(Direction.RIGHT))){
-         tmp=this.contiguity(this.euristic(Direction.RIGHT))+this.freeCells(this.euristic(Direction.RIGHT))+this.monotony(this.euristic(Direction.RIGHT));
-         dir=1;
-         
-     }
-    if (this.isSame(oldGriglia, this.euristic(Direction.DOWN)))
-     if (tmp< (this.contiguity(this.euristic(Direction.DOWN))+this.freeCells(this.euristic(Direction.DOWN))+this.monotony(this.euristic(Direction.DOWN)))/3){
-         tmp=this.contiguity(this.euristic(Direction.DOWN))+this.freeCells(this.euristic(Direction.DOWN))+this.monotony(this.euristic(Direction.UP));
-         dir=2;
-         
-     }
-    
-         
-return dir;
-
+public int punteggioMossa(Direction dir) {
+    int punteggio=this.contiguity(this.euristic(dir))*contiguityWeight+this.freeCells(this.euristic(dir))*freeCellsWeight+this.monotony(this.euristic(dir))*monotonyWeight;
+    if (dir==Direction.LEFT) return punteggio*leftSideWeight;
+    else if (dir==Direction.UP) return punteggio*upSideWeight;
+    else if (dir==Direction.DOWN) return punteggio*downSideWeight;
+    else return punteggio*rightSideWeight;
 }
+
+    
+    public int arbiter() {
+
+        int punti = 0;
+        int dir = 3;
+        int[][] oldGriglia = this.griglia;
+
+        if (this.isNotSame(oldGriglia, this.euristic(Direction.LEFT))) {
+            punti = (punteggioMossa(Direction.LEFT));
+        }
+        if (this.isNotSame(oldGriglia, this.euristic(Direction.UP))) {
+            if (punti < punteggioMossa(Direction.UP)) {
+                punti = punteggioMossa(Direction.UP);
+                dir = 0;
+
+            }
+        }
+        if (this.isNotSame(oldGriglia, this.euristic(Direction.RIGHT))) {
+            if (punti < punteggioMossa(Direction.RIGHT)) {
+                punti = punteggioMossa(Direction.RIGHT);
+                dir = 1;
+
+            }
+        }
+        if (this.isNotSame(oldGriglia, this.euristic(Direction.DOWN))) {
+            if (punti < punteggioMossa(Direction.DOWN)) {
+                punti = punteggioMossa(Direction.DOWN);
+                dir = 2;
+
+            }
+        }
+
+        return dir;
+
+    }
 
 }
