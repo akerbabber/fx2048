@@ -1,5 +1,7 @@
 package game2048;
 
+import giocatoreAutomatico.Griglia;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.ConditionalFeature;
@@ -46,6 +48,7 @@ public class Game2048 extends Application {
         GiocatoreAutomatico player1=GiocatoreAutomatico.getGiocatoreAutomatico();
         
         gameManager.getAutomatonButton().setOnAction((event)->{
+<<<<<<< HEAD
 
                 /* Lock the keys */
                 scene.setOnKeyPressed(ke->{});
@@ -81,6 +84,20 @@ public class Game2048 extends Application {
                 /* Reset user input */
                 addKeyHandler(scene);
 
+=======
+            /* Lock the keys */
+            scene.setOnKeyPressed(ke->{});
+            java.util.HashMap<Location,Integer> gridAux=new giocatoreAutomatico.GrigliaObject(gameManager.getGameGrid());
+           System.out.println( gridAux.toString());
+    
+      giocatoreAutomatico.GiocatoreAutomatico giocAusu=new giocatoreAutomatico.player.MyGiocatoreAutomatico();
+            
+           int intAsau=giocAusu.prossimaMossa(  gameManager.getIntegerGrid());
+           if(intAsau==0) this.gameManager.move(Direction.UP);
+            if(intAsau==1) this.gameManager.move(Direction.DOWN);
+             if(intAsau==2) this.gameManager.move(Direction.LEFT);
+              if(intAsau==3) this.gameManager.move(Direction.RIGHT);
+>>>>>>> 06dbce6233fd9acd9674f06f98cdab4457e4a97c
         });
 
 

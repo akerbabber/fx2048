@@ -583,12 +583,28 @@ public class GameManager extends Group {
 
     }
 
+<<<<<<< HEAD
 
     public Map<Location, Tile> getGameGrid(){
+=======
+    /**
+     *
+     * @return
+     */
+    public giocatoreAutomatico.GrigliaObject getIntegerGrid(){
+         Set<Location> locations=gameGrid.keySet();
+         giocatoreAutomatico.GrigliaObject map=new giocatoreAutomatico.GrigliaObject(gameGrid);
+           
+        return map;
+
+    }
+     public Map<Location, Tile> getGameGrid(){
+>>>>>>> 06dbce6233fd9acd9674f06f98cdab4457e4a97c
 
         return this.gameGrid;
 
     }
+<<<<<<< HEAD
 
     public boolean getMovingTiles(){
 
@@ -599,4 +615,7 @@ public class GameManager extends Group {
         }
 
     }
+=======
+    
+>>>>>>> 06dbce6233fd9acd9674f06f98cdab4457e4a97c
 }
