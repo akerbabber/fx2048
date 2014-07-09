@@ -7,14 +7,14 @@ import java.util.Set;
 
 public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
     
-    final int monotonyWeight=1;
-    final int contiguityWeight=1;
-    final int freeCellsWeight=1;
+    final int monotonyWeight=4;
+    final int contiguityWeight=2;
+    final int freeCellsWeight=2;
     final int mergeWeight=1;
-    final int upSideWeight=1;
-    final int rightSideWeight=1;
-    final int leftSideWeight=1;
-    final int downSideWeight=1;
+    final int upSideWeight=6;
+    final int rightSideWeight=5;
+    final int leftSideWeight=4;
+    final int downSideWeight=3;
     final int previsionTreeDepth=1;
     
     private int[][] griglia = new int[4][4];
