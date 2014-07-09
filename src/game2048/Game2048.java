@@ -78,13 +78,10 @@ public class Game2048 extends Application {
                     }
 
                 }
-                
-                if(gameManager.isGameOver()){
+                                
 
-                    /* Reset user input */
-                    addKeyHandler(scene);
-
-                }
+                /* Reset user input */
+                addKeyHandler(scene);
 
         });
 
