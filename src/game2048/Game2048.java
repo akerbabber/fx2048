@@ -50,7 +50,6 @@ public class Game2048 extends Application {
                 /* Lock the keys */
                 scene.setOnKeyPressed(ke->{});
 
-                /* !! FIND A WAY TO SYNCHRONIZE ANIMATION AND MOVE */
                 if(!(gameManager.isGameOver()) && !(gameManager.getMovingTiles())){
 
                     switch(player1.prossimaMossa(new GrigliaObject(gameManager.getGameGrid()))){
@@ -77,8 +76,7 @@ public class Game2048 extends Application {
 
                     }
 
-                }
-                                
+                }                                
 
                 /* Reset user input */
                 addKeyHandler(scene);
