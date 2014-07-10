@@ -9,13 +9,13 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
     
     final int MONOTONYWEIGHT=4;
     final int CONTIGUITYWEIGHT=2;
-    final int FREECELLSWIEGHT=2;
-    final int MERGEWEIGHT=1;
-    final int UPPERSIDEWEIGHT=6;
-    final int RIGHTSIDEWEIGHT=5;
-    final int LEFTSIDEWEIGHT=4;
-    final int DOWNSIDEWEIGHT=3;
-    final int PREVISIONTREEDEPTH=1;
+    final int FREECELLSWIEGHT=5;
+    final int MERGEWEIGHT=3;
+    final int UPPERSIDEWEIGHT=7;
+    final int RIGHTSIDEWEIGHT=6;
+    final int LEFTSIDEWEIGHT=5;
+    final int DOWNSIDEWEIGHT=1;
+    final int PREVISIONTREEDEPTH=2;
     
     private int[][] griglia = new int[4][4];
 
@@ -666,10 +666,10 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
      * 
      * @return            The move points.
      */
-    public int punteggioMossa(int[][] grid, Direction dir, int ricorsioni) 
+    public int punteggioMossa(int[][] grid, Direction dir, int ricorsioni, int tot) 
     {
 
-        int[] punteggio = new int[4];
+       //// int[] punteggio = new int[4];
         int [][] auxGrid=new int [4][4];
         int punti;
 
@@ -692,24 +692,18 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
         {
             ricorsioni--;
 
-            punteggio[0] = punteggioMossa(this.euristic(auxGrid,Direction.UP ), Direction.UP, ricorsioni);
-            punteggio[1]= punteggioMossa(this.euristic(auxGrid,Direction.RIGHT ),Direction.RIGHT, ricorsioni);
-            punteggio[2]= punteggioMossa(this.euristic(auxGrid,Direction.DOWN ), Direction.DOWN, ricorsioni);
-            punteggio[3]= punteggioMossa(this.euristic(auxGrid,Direction.LEFT ), Direction.LEFT, ricorsioni);
+            tot+= punteggioMossa(this.euristic(auxGrid,Direction.UP ), Direction.UP, ricorsioni, tot);
+            tot+= punteggioMossa(this.euristic(auxGrid,Direction.RIGHT ),Direction.RIGHT, ricorsioni, tot);
+            tot+= punteggioMossa(this.euristic(auxGrid,Direction.DOWN ), Direction.DOWN, ricorsioni, tot);
+            tot+= punteggioMossa(this.euristic(auxGrid,Direction.LEFT ), Direction.LEFT, ricorsioni, tot);
 
-            Arrays.sort(punteggio);
-
-            return punteggio[3]; 
+            return tot; 
         
-        }      
-        
+        }   
         
         punti=this.puntiMerge(grid, dir)+this.contiguity(auxGrid)*CONTIGUITYWEIGHT+this.freeCells(auxGrid)*FREECELLSWIEGHT+this.monotony(auxGrid)*MONOTONYWEIGHT;
         
-        if (dir==Direction.LEFT) return punti;
-        else if (dir==Direction.UP) return punti;
-        else if (dir==Direction.DOWN) return punti;
-        else return punti;
+        return punti;
         
     }
 
@@ -728,16 +722,16 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
         /* RIGHT POINTS*/
         if (this.isNotSame(oldGriglia, this.euristic(oldGriglia,Direction.RIGHT))) {
             
-            punti = RIGHTSIDEWEIGHT*(punteggioMossa(oldGriglia,Direction.RIGHT, PREVISIONTREEDEPTH));
+            punti = RIGHTSIDEWEIGHT*(punteggioMossa(oldGriglia,Direction.RIGHT, PREVISIONTREEDEPTH, 0));
             
         }
 
         /* UP POINTS */
         if (this.isNotSame(oldGriglia, this.euristic(oldGriglia,Direction.UP))) {
 
-            if (punti < UPPERSIDEWEIGHT*punteggioMossa(oldGriglia,Direction.UP, PREVISIONTREEDEPTH)) {
+            if (punti < UPPERSIDEWEIGHT*punteggioMossa(oldGriglia,Direction.UP, PREVISIONTREEDEPTH, 0)) {
 
-                punti = UPPERSIDEWEIGHT*punteggioMossa(oldGriglia,Direction.UP, PREVISIONTREEDEPTH);
+                punti = UPPERSIDEWEIGHT*punteggioMossa(oldGriglia,Direction.UP, PREVISIONTREEDEPTH, 0);
                 dir = 0;              
 
             }
@@ -747,9 +741,9 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
         /* LEFT POINTS */
         if (this.isNotSame(oldGriglia, this.euristic(oldGriglia,Direction.LEFT))) {
 
-            if (punti < LEFTSIDEWEIGHT*punteggioMossa(oldGriglia,Direction.LEFT, PREVISIONTREEDEPTH)) {
+            if (punti < LEFTSIDEWEIGHT*punteggioMossa(oldGriglia,Direction.LEFT, PREVISIONTREEDEPTH, 0)) {
 
-                punti = LEFTSIDEWEIGHT*punteggioMossa(oldGriglia,Direction.LEFT, PREVISIONTREEDEPTH);
+                punti = LEFTSIDEWEIGHT*punteggioMossa(oldGriglia,Direction.LEFT, PREVISIONTREEDEPTH, 0);
                 dir = 3;
 
             }
@@ -759,9 +753,9 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
         /* DOWN POINTS */
         if (this.isNotSame(oldGriglia, this.euristic(oldGriglia,Direction.DOWN))) {
 
-            if (punti < DOWNSIDEWEIGHT*punteggioMossa(oldGriglia,Direction.DOWN, PREVISIONTREEDEPTH)) {
+            if (punti < DOWNSIDEWEIGHT*punteggioMossa(oldGriglia,Direction.DOWN, PREVISIONTREEDEPTH, 0)) {
 
-                punti = DOWNSIDEWEIGHT*punteggioMossa(oldGriglia,Direction.DOWN, PREVISIONTREEDEPTH);
+                punti = DOWNSIDEWEIGHT*punteggioMossa(oldGriglia,Direction.DOWN, PREVISIONTREEDEPTH, 0);
                 dir = 2;
 
             }
