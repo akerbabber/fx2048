@@ -6,10 +6,10 @@ import java.util.Set;
 
 public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
     
-    final int MONOTONYWEIGHT=5;
+    final int MONOTONYWEIGHT=10;
     final int CONTIGUITYWEIGHT=1;
-    final int FREECELLSWIEGHT=10;
-    final int MERGEWEIGHT=5;
+    final int FREECELLSWIEGHT=20;
+    final int MERGEWEIGHT=10;
     final int UPPERSIDEWEIGHT=10;
     final int RIGHTSIDEWEIGHT=9;
     final int LEFTSIDEWEIGHT=9;
@@ -19,7 +19,7 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
     /**
      * Select next move.
      * 
-     * @param  gameG The game grid.
+     * @param  gameGrid The game grid.
      * 
      * @return   0 == Direction.UP | 1 == Direction.RIGHT | 2 == Direction.DOWN | 3 == Direction.LEFT
      */
@@ -31,11 +31,12 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
     }  
 
     /**
-     * Calculate move poridints.
+     * Calculate move points.
      * 
      * @param  grid       The game grid.
      * @param  dir        The move direction.
      * @param  ricorsioni Current tree level.
+     * @param  tot        Depth and width sum in the prevision tree.
      * 
      * @return            The move points.
      */
@@ -62,18 +63,19 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
         
         }   
         
-        punti=grid.puntiMerge(dir)+auxGrid.contiguity()*CONTIGUITYWEIGHT+auxGrid.freeCells()*FREECELLSWIEGHT+auxGrid.monotony()*MONOTONYWEIGHT;
+        punti=grid.puntiMerge(dir)*MERGEWEIGHT+auxGrid.contiguity()*CONTIGUITYWEIGHT+auxGrid.freeCells()*FREECELLSWIEGHT+auxGrid.monotony()*MONOTONYWEIGHT;
         
         return punti;
         
     }
+
 
     /**
      * Choose the best move out of the 4 available.
      * 
      * @param  oldGriglia The game grid.
      * 
-     * @return            The best move. At least better than the one we'd do.
+     * @return            The best move. ( 0 == Direction.UP | 1 == Direction.RIGHT | 2 == Direction.DOWN | 3 == Direction.LEFT )
      */
     public int arbiter(MatrixGriglia oldGriglia) {
         
@@ -87,7 +89,7 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
             
         }
 
-        /* UP POINTS */
+        /* Up move points */
         if (!(oldGriglia.equals(oldGriglia.emulateMove(Direction.UP)))) {
 
             if (punti < UPPERSIDEWEIGHT*(pointsMove(oldGriglia,Direction.UP, PREVISIONTREEDEPTH, 0))) {
@@ -99,7 +101,7 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
 
         }
 
-        /* LEFT POINTS */
+        /* Left move points */
         if (!(oldGriglia.equals(oldGriglia.emulateMove(Direction.LEFT)))) {
 
             if (punti < LEFTSIDEWEIGHT*(pointsMove(oldGriglia,Direction.LEFT, PREVISIONTREEDEPTH, 0))) {
@@ -111,7 +113,7 @@ public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
 
         }
 
-        /* DOWN POINTS */
+        /* Down points */
         if (!(oldGriglia.equals(oldGriglia.emulateMove(Direction.DOWN)))) {
 
             if (punti < DOWNSIDEWEIGHT*(pointsMove(oldGriglia,Direction.DOWN, PREVISIONTREEDEPTH, 0))) {
