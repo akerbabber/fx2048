@@ -3,6 +3,11 @@ package giocatoreAutomatico;
 import java.util.Set;
 import game2048.*;
 
+/**
+ * A matrix implementation of Griglia.
+ *
+ * @see Griglia
+ */
 public class MatrixGriglia {
 
 	private int[][] matrix; 
@@ -10,7 +15,8 @@ public class MatrixGriglia {
 
 	/**
 	 * Create an empty matrix.
-	 * @return [description]
+     * 
+	 * @return An empty matrix.
 	 */
 	public MatrixGriglia(){
 
@@ -30,8 +36,10 @@ public class MatrixGriglia {
 
 	/**
 	 * Create a MatrixGriglia from a GrigliaObject.
-	 * @param  grid [description]
-	 * @return      [description]
+     * 
+	 * @param  grid The game grid.
+     * 
+	 * @return      A MatrixGriglia implementation of a Griglia.
 	 */
 	public MatrixGriglia(Griglia grid){
 
@@ -40,7 +48,7 @@ public class MatrixGriglia {
 		this.matrix=new int[4][4];		
 
         for (Location currentLocation : locations) {
-
+            // In the original code X and Y axes are switched.
             this.matrix[currentLocation.getY()][currentLocation.getX()] = grid.get(currentLocation).intValue();
 
         }
@@ -101,7 +109,7 @@ public class MatrixGriglia {
 	}
 
 	/**
-	 * Copy a MatrixGriglia
+	 * Copy a MatrixGriglia.
 	 * 
 	 * @return A copy of this MatrixGriglia.
 	 */
@@ -351,29 +359,24 @@ public class MatrixGriglia {
      	  
         MatrixGriglia newGrid=this.copy();
         boolean[] isMerged = new boolean[4]; // Check tiles merging.
-        int i, j, k; // Indexes.
+        int i, j, k;
 
-        ////////////LEFT
         if (dir==Direction.LEFT)
         {
             return newGrid.emulateLeft();
         }
 
-
-        ///////////////RIGHT
-       else if (dir==Direction.RIGHT) 
+        else if (dir==Direction.RIGHT) 
         {
             return newGrid.emulateRight();
         }
 
-        //////////////UP
-       else if (dir==Direction.UP) 
+        else if (dir==Direction.UP) 
         {
             return newGrid.emulateUp();
 
         }
         
-        //////////////DOWN
         else  
         {
             return newGrid.emulateDown();
@@ -384,7 +387,7 @@ public class MatrixGriglia {
     /**
      * Emulate a move to the right side.
      * 
-     * @return The grid with the played move.
+     * @return The grid after the played move.
      */
     private MatrixGriglia emulateRight(){
         
@@ -457,7 +460,7 @@ public class MatrixGriglia {
     /**
      * Emulate a move to the left side.
      * 
-     * @return The grid with the played move.
+     * @return The grid after the played move.
      */
     private MatrixGriglia emulateLeft() {
 
@@ -520,7 +523,7 @@ public class MatrixGriglia {
     /**
      * Emulate a move to the upper side.
      * 
-     * @return The grid with the played move.
+     * @return The grid after the played move.
      */
     private MatrixGriglia emulateUp() {
         
@@ -583,7 +586,7 @@ public class MatrixGriglia {
     /**
      * Emulate a move to the bottom side.
      * 
-     * @return The grid with the played move.
+     * @return The grid after the played move.
      */
     private MatrixGriglia emulateDown() {
 
