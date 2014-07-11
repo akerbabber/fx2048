@@ -571,41 +571,38 @@ public class GameManager extends Group {
         }
     }
 
+
+    /** Return automaton button.
+    *
+    * @return The automaton button.
+    */
     public Button getAutomatonButton(){
 
         return this.automatonButton;
         
     }
 
+    /** Check if game is overtherwise.
+    *
+    * @return True if game is over, false o
+    */
     public boolean isGameOver(){
 
         return (this.gameOverProperty.get() || this.gameWonProperty.get());
 
     }
 
-<<<<<<< HEAD
-
+    /** Return game grid.
+    *
+    * @return The game grid.
+    */
     public Map<Location, Tile> getGameGrid(){
-=======
-    /**
-     *
-     * @return
-     */
-    public giocatoreAutomatico.GrigliaObject getIntegerGrid(){
-         Set<Location> locations=gameGrid.keySet();
-         giocatoreAutomatico.GrigliaObject map=new giocatoreAutomatico.GrigliaObject(gameGrid);
-           
-        return map;
-
-    }
-     public Map<Location, Tile> getGameGrid(){
->>>>>>> 06dbce6233fd9acd9674f06f98cdab4457e4a97c
 
         return this.gameGrid;
 
     }
-<<<<<<< HEAD
 
+    /** Check if an animation is on play. */
     public boolean getMovingTiles(){
 
         synchronized(gameGrid){
@@ -615,7 +612,4 @@ public class GameManager extends Group {
         }
 
     }
-=======
-    
->>>>>>> 06dbce6233fd9acd9674f06f98cdab4457e4a97c
 }
