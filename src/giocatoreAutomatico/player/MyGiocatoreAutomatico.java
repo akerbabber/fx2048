@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class MyGiocatoreAutomatico implements GiocatoreAutomatico {
     
-    final int MONOTONYWEIGHT=10;
+    final int MONOTONYWEIGHT=8;
     final int CONTIGUITYWEIGHT=1;
     final int FREECELLSWIEGHT=20;
     final int MERGEWEIGHT=10;
