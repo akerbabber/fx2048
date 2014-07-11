@@ -572,8 +572,9 @@ public class GameManager extends Group {
     }
 
 
-    /** Return automaton button.
-    *
+    /** 
+    * Return automaton button.
+    * 
     * @return The automaton button.
     */
     public Button getAutomatonButton(){
@@ -582,9 +583,10 @@ public class GameManager extends Group {
         
     }
 
-    /** Check if game is overtherwise.
-    *
-    * @return True if game is over, false o
+    /** 
+    * Check if game is over.
+    * 
+    * @return True if game is over, false otherwise.
     */
     public boolean isGameOver(){
 
@@ -592,8 +594,9 @@ public class GameManager extends Group {
 
     }
 
-    /** Return game grid.
-    *
+    /** 
+    * Return game grid.
+    * 
     * @return The game grid.
     */
     public Map<Location, Tile> getGameGrid(){
@@ -602,7 +605,11 @@ public class GameManager extends Group {
 
     }
 
-    /** Check if an animation is on play. */
+    /**
+     * Check if an animation is on play.
+     * 
+     * @return True if an animation is on play, false otherwise.
+     */
     public boolean getMovingTiles(){
 
         synchronized(gameGrid){

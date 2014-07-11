@@ -52,6 +52,7 @@ public class Game2048 extends Application {
                 /* Lock the keys */
                 scene.setOnKeyPressed(ke->{});
 
+                /* Check game state and mutex */
                 if(!(gameManager.isGameOver()) && !(gameManager.getMovingTiles())){
 
                     switch(player1.prossimaMossa(new GrigliaObject(gameManager.getGameGrid()))){
