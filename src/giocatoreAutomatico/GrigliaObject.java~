@@ -1,7 +1,6 @@
 package game2048;
 
 import game2048.*;
-import giocatoreAutomatico.*;
 import java.util.*;
 
 public class GrigliaObject extends HashMap<Location, Integer> implements Griglia {
