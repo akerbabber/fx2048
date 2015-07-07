@@ -176,16 +176,19 @@ public class GameManager extends Group {
 
             // reset merged after each movement
             gameGrid.values().stream().filter(Objects::nonNull).forEach(Tile::clearMerge);
+
+
         });
 
         
         synchronized (gameGrid) {
+
             movingTiles = true;
+
         }
 
         parallelTransition.play();
         parallelTransition.getChildren().clear();
-
 
     }
 
@@ -568,31 +571,52 @@ public class GameManager extends Group {
         }
     }
 
+
+    /** 
+    * Return automaton button.
+    * 
+    * @return The automaton button.
+    */
     public Button getAutomatonButton(){
+
         return this.automatonButton;
+        
     }
 
+    /** 
+    * Check if game is over.
+    * 
+    * @return True if game is over, false otherwise.
+    */
     public boolean isGameOver(){
 
-        return this.gameOverProperty.get();
+        return (this.gameOverProperty.get() || this.gameWonProperty.get());
 
     }
 
-    /**
-     *
-     * @return
-     */
-    public giocatoreAutomatico.GrigliaObject getIntegerGrid(){
-         Set<Location> locations=gameGrid.keySet();
-         giocatoreAutomatico.GrigliaObject map=new giocatoreAutomatico.GrigliaObject(gameGrid);
-           
-        return map;
-
-    }
-     public Map<Location, Tile> getGameGrid(){
+    /** 
+    * Return game grid.
+    * 
+    * @return The game grid.
+    */
+    public Map<Location, Tile> getGameGrid(){
 
         return this.gameGrid;
 
     }
-    
+
+    /**
+     * Check if an animation is on play.
+     * 
+     * @return True if an animation is on play, false otherwise.
+     */
+    public boolean getMovingTiles(){
+
+        synchronized(gameGrid){
+
+            return this.movingTiles;
+
+        }
+
+    }
 }

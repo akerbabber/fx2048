@@ -14,6 +14,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import giocatoreAutomatico.*;
+import giocatoreAutomatico.player.*;
+
 /**
  * @author bruno.borges@oracle.com
  */
@@ -23,7 +26,7 @@ public class Game2048 extends Application {
     private Bounds gameBounds;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception{
         gameManager = new GameManager();
         gameBounds = gameManager.getLayoutBounds();
         int token=0;
@@ -42,20 +45,43 @@ public class Game2048 extends Application {
         addKeyHandler(scene);
         addSwipeHandlers(scene);
         
+        GiocatoreAutomatico player1=GiocatoreAutomatico.getGiocatoreAutomatico();
+        
         gameManager.getAutomatonButton().setOnAction((event)->{
-            /* Lock the keys */
-            scene.setOnKeyPressed(ke->{});
-            java.util.HashMap<Location,Integer> gridAux=new giocatoreAutomatico.GrigliaObject(gameManager.getGameGrid());
-           System.out.println( gridAux.toString());
-    
-      giocatoreAutomatico.GiocatoreAutomatico giocAusu=new giocatoreAutomatico.player.MyGiocatoreAutomatico();
-            
-           int intAsau=giocAusu.prossimaMossa(  gameManager.getIntegerGrid());
-           if(intAsau==0) this.gameManager.move(Direction.UP);
-            if(intAsau==1) this.gameManager.move(Direction.DOWN);
-             if(intAsau==2) this.gameManager.move(Direction.LEFT);
-              if(intAsau==3) this.gameManager.move(Direction.RIGHT);
+
+                /* Lock the keys */
+                scene.setOnKeyPressed(ke->{});
+
+                /* Check game state and mutex */
+                if(!(gameManager.isGameOver()) && !(gameManager.getMovingTiles())){
+
+                    switch(player1.prossimaMossa(new GrigliaObject(gameManager.getGameGrid()))){
+
+                        case 0:
+                            gameManager.move(Direction.UP);
+                        break;
+
+                        case 1:
+                            gameManager.move(Direction.RIGHT);
+                        break;
+
+                        case 2:
+                            gameManager.move(Direction.DOWN);
+                        break;
+
+                        case 3:
+                            gameManager.move(Direction.LEFT);
+                        break;
+
+                    }
+
+                }                                
+
+                /* Reset user input */
+                addKeyHandler(scene);
+
         });
+
 
         if (isARMDevice()) {
             primaryStage.setFullScreen(true);
